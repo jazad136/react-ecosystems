@@ -1,8 +1,12 @@
 const path = require('path')
-const webpack = require('webpack')
+// const webpack = require('webpack')
+const HtmlWebpackPlugin = require('webpack-html-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        main: './src/index.js',
+        todotest: './src/todotest.js'
+    },
     mode: 'development',
     module: {
         rules: [
@@ -22,7 +26,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '/dist/',
-        filename: 'bundle.js'
+        filename: '[name].bundle.js',
+        chunkFilename: '[id].bundle_[chunkhash].js'
     },
     devServer: {
         static: {
@@ -33,5 +38,17 @@ module.exports = {
             publicPath: 'http://localhost:3000/dist/'
         },
         hot: 'only'
-    }
+    } ,
+    plugins: [
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: 'public/index.html',
+        chunks: ['main']
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'todotest.html',
+        template: 'public/todotest.html',
+        chunks: ['todotest']
+      })
+    ]
 }
